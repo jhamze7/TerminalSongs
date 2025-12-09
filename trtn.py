@@ -3,19 +3,6 @@ import time
 
 full_art = r"""
 
-
-
-
-
-
-
-
-
-
-
-
-
-
                                                                                    ...........                                                                        
                                                                             ..-+%@@@@@%######***++-..                                                                 
                                                                   ..-+#%@@@@@@@@@@@@@@@@@@@@@@@%%%%##*+=..                                                            
@@ -103,7 +90,6 @@ full_art = r"""
                                                                         ..........................                                                                    
 """
 
-
 trtn = r"""
 ___________    .__              .__       .__                             .__                    __  .__                            __  .__               
 \__    ___/___ |  |   _______  _|__| _____|__| ____   ____   _______ __ __|  |   ____   ______ _/  |_|  |__   ____     ____ _____ _/  |_|__| ____   ____  
@@ -113,111 +99,142 @@ ___________    .__              .__       .__                             .__   
              \/          \/             \/               \/                         \/     \/             \/     \/       \/     \/                    \/ 
 """
 
+atw = r"""
+   _____ __________ ________   ____ __________  ________    ______________ ______________  __      __________ __________.____     ________   
+  /  _  \\______   \\_____  \ |    |   \      \ \______ \   \__    ___/   |   \_   _____/ /  \    /  \_____  \\______   \    |    \______ \  
+ /  /_\  \|       _/ /   |   \|    |   /   |   \ |    |  \    |    | /    ~    \    __)_  \   \/\/   //   |   \|       _/    |     |    |  \ 
+/    |    \    |   \/    |    \    |  /    |    \|    `   \   |    | \    Y    /        \  \        //    |    \    |   \    |___  |    `   \
+\____|__  /____|_  /\_______  /______/\____|__  /_______  /   |____|  \___|_  /_______  /   \__/\  / \_______  /____|_  /_______ \/_______  /
+        \/       \/         \/                \/        \/                  \/        \/         \/          \/       \/        \/        \/ 
+"""
 
+the_world = r"""
+                                              ______________ ______________  __      __________ __________.____     ________   
+                                              \__    ___/   |   \_   _____/ /  \    /  \_____  \\______   \    |    \______ \  
+                                                |    | /    ~    \    __)_  \   \/\/   //   |   \|       _/    |     |    |  \ 
+                                                |    | \    Y    /        \  \        //    |    \    |   \    |___  |    `   \
+                                                |____|  \___|_  /_______  /   \__/\  / \_______  /____|_  /_______ \/_______  /
+                                                              \/        \/         \/          \/       \/        \/        \/ 
+"""
 
-SPLIT_COL = 88
-LEFT_PAD = " " * SPLIT_COL
-
-# ----------- TIMELINE -----------
-# Put timestamps (in seconds) and which helmet to show.
-# Replace these with the real times from the song.
 timeline = [
     (0.00, "left"),
     (5.58, "right"),
     (7.84, "left"),
-    (13.27, "right"),
-    (15.40, "left"),
-    (20.81, "right"),
-    (23.07, "left"),
-    (28.47, "right"),
-    (29.98, "left"),
+    (13.27,"right"),
+    (15.40,"left"),
+    (20.81,"right"),
+    (23.07,"left"),
+    (28.47,"right"),
+    (29.98,"left"),
 ]
 
-# ===========================
-#  SETUP
-# ===========================
+timeline.sort()
 
-# Split into left and right art
+# ======================================================
+#  SPLIT THE ART
+# ======================================================
+
+SPLIT_COL = 88
+LEFT_PAD  = " " * SPLIT_COL
+
 lines = full_art.splitlines()
 
-left_art = "\n".join(line[:SPLIT_COL] for line in lines)
+left_art  = "\n".join(line[:SPLIT_COL]           for line in lines)
 right_art = "\n".join(LEFT_PAD + line[SPLIT_COL:] for line in lines)
 
-# Fast clear using ANSI
+# ======================================================
+#  UTILS
+# ======================================================
+
 def clear():
     print("\033c", end="", flush=True)
 
-printed_lyrics = []   # stores all past lyrics
-LYRIC_COL_WIDTH = 40
 
-# displays the frame with the corresponding lyric
-def show_frame(art, new_lyric):
+# ======================================================
+#  TRTN ANIMATION (unchanged from your test file)
+# ======================================================
+
+PAUSE_COL  = 60
+PAUSE_TIME = 2
+
+def trtn_animation(text):
     clear()
 
-    # Add the lyric to the list
-    if new_lyric:
-        printed_lyrics.append(new_lyric)
+    lines = text.splitlines()
+    max_width = max(len(line) for line in lines)
+    padded = [line.ljust(max_width) for line in lines]
 
-    # Build left lyric column as a single block
-    lyric_block = ""
-    for line in printed_lyrics:
-        lyric_block += line + "\n"
+    speed = 0.03
 
-    # Print lyrics on the left in a fixed-width column
-    lyric_lines = lyric_block.splitlines()
-    art_lines = art.splitlines()
+    for col in range(max_width + 1):
+        clear()
 
-    # Merge left lyric column + right ASCII art
-    for i in range(max(len(lyric_lines), len(art_lines))):
-        left_part = lyric_lines[i] if i < len(lyric_lines) else ""
-        left_part = left_part.ljust(LYRIC_COL_WIDTH)
+        for line in padded:
+            print(line[:col])
 
-        right_part = art_lines[i] if i < len(art_lines) else ""
+        if col == PAUSE_COL:
+            time.sleep(PAUSE_TIME)
+            speed = 0.015
 
-        print(left_part + right_part)
+        time.sleep(speed)
 
 
+# ======================================================
+#  SHOW FRAME (calls animation when needed)
+# ======================================================
 
-# Ensure the timeline is sorted by time
-timeline.sort()
+def show_left_frame():
+    """Plays TRTN animation then shows the left helmet."""
+    # trtn_animation(trtn)
+    clear()
+    print(trtn)
+    print(left_art)
 
-# ===========================
-#  RUNTIME LOOP
-# ===========================
+def show_right_frame():
+    """Instant display of ATW + right helmet."""
+    clear()
+    print(atw)
+    print(right_art)
+
+
+# ======================================================
+#  MAIN TIMED LOOP
+# ======================================================
 
 BEAT = 60/126
 
 def run_animation():
     clear()
-    print("Waiting for music... Press ENTER exactly when the song starts.")
+    print("Press ENTER when the music starts.")
     input()
 
-    start_time = time.time()
-    event_index = 0
-    total_events = len(timeline)
+    start = time.time()
+    idx = 0
 
-    while event_index < total_events:
-        now = time.time() - start_time
-        event_time, which = timeline[event_index]
+    while idx < len(timeline):
+        now = time.time() - start
+        event_time, side = timeline[idx]
 
         if now >= event_time:
-            clear()
-            if which == "left":
-                print(left_art)
+            if side == "left":
+                show_left_frame()
             else:
-                print(right_art)
+                show_right_frame()
 
-            event_index += 1
+            idx += 1
         else:
             time.sleep(0.01)
 
-    # End animation: flash full art in time with beat
+    # End: flash full art
     while True:
         clear()
+        print(the_world)
         print(full_art)
         time.sleep(BEAT)
 
         clear()
         time.sleep(BEAT)
+
 
 run_animation()
