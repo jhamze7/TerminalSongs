@@ -142,7 +142,7 @@ right_art = "\n".join(LEFT_PAD + line[SPLIT_COL:] for line in lines)
 
 # function to clear the terminal
 def clear():
-    print("\033[2J\033[H", end="", flush=True)
+    print("\033c", end="", flush=True)
 
 PAUSE_COL  = 60
 PAUSE_TIME = 2
