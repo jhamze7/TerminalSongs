@@ -36,10 +36,18 @@ python trtn.py
 <br>
 <br>
 
+## Prerequisites
+- Python 3.x
+- VS Code terminal (working on bugs with other terminals)
+- A music player (Spotify, YouTube, etc.)
+
+<br>
+<br>
+
 ## Installation
 ```bash
 git clone https://github.com/jhamze7/TerminalSongs.git
-cd terminal_songs
+cd TerminalSongs
 ```
 
 ## Authors
