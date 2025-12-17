@@ -126,15 +126,12 @@ timeline = [
     (20.81,"right"),
     (23.07,"left"),
     (28.47,"right"),
-    (29.98,"left"),
+    (29.98,"right"),
 ]
 
 timeline.sort()
 
-# ======================================================
-#  SPLIT THE ART
-# ======================================================
-
+#split the art down the middle
 SPLIT_COL = 88
 LEFT_PAD  = " " * SPLIT_COL
 
@@ -143,22 +140,15 @@ lines = full_art.splitlines()
 left_art  = "\n".join(line[:SPLIT_COL]           for line in lines)
 right_art = "\n".join(LEFT_PAD + line[SPLIT_COL:] for line in lines)
 
-# ======================================================
-#  UTILS
-# ======================================================
-
+# function to clear the terminal
 def clear():
-    print("\033c", end="", flush=True)
-
-
-# ======================================================
-#  TRTN ANIMATION (unchanged from your test file)
-# ======================================================
+    print("\033[2J\033[H", end="", flush=True)
 
 PAUSE_COL  = 60
 PAUSE_TIME = 2
 
-def trtn_animation(text):
+# TRTN animation
+def trtn_animation(text, bottom_art=None):
     clear()
 
     lines = text.splitlines()
@@ -172,6 +162,9 @@ def trtn_animation(text):
 
         for line in padded:
             print(line[:col])
+        
+        if bottom_art:
+            print(bottom_art)
 
         if col == PAUSE_COL:
             time.sleep(PAUSE_TIME)
@@ -180,16 +173,10 @@ def trtn_animation(text):
         time.sleep(speed)
 
 
-# ======================================================
-#  SHOW FRAME (calls animation when needed)
-# ======================================================
-
+# Functions to show frames
 def show_left_frame():
     """Plays TRTN animation then shows the left helmet."""
-    # trtn_animation(trtn)
-    clear()
-    print(trtn)
-    print(left_art)
+    trtn_animation(trtn, bottom_art=left_art)
 
 def show_right_frame():
     """Instant display of ATW + right helmet."""
@@ -197,11 +184,7 @@ def show_right_frame():
     print(atw)
     print(right_art)
 
-
-# ======================================================
-#  MAIN TIMED LOOP
-# ======================================================
-
+# Main loop
 BEAT = 60/126
 
 def run_animation():
@@ -226,8 +209,11 @@ def run_animation():
         else:
             time.sleep(0.01)
 
-    # End: flash full art
-    while True:
+    # flash full art for 1 minute
+    flash_start = time.time()
+    flash_duration = 60
+    
+    while time.time() - flash_start < flash_duration:
         clear()
         print(the_world)
         print(full_art)
