@@ -26,8 +26,9 @@ python trtn.py
 3. Press ENTER exactly when the music starts
 4. Enjoy the synchronized visualization
 
-## Demo Video
-https://user-images.githubusercontent.com/jhamze7/demo.mp4
+**Demo Video:**
+https://github.com/user-attachments/assets/ee1b09b7-173d-4020-8595-6c4ef9c4b72e
+
 
 **Note:** Currently runs buggy in Mac Terminal (screen scrolling issues). Works properly in VS Code terminal. Planning to fix all terminal compatibility in the future.
 
